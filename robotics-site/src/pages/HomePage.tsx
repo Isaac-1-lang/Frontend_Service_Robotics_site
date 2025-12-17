@@ -18,7 +18,7 @@ export default function HomePage() {
           <div className="relative grid gap-10 lg:grid-cols-2">
             <div className="space-y-6 text-white">
               <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide">
-                Rwanda Coding Academy Robotics Club
+                RCA Robotics Club
               </div>
               <h1 className="text-4xl font-bold leading-tight sm:text-5xl">
                 Build, test, and launch robotics and AI that shape Rwanda&apos;s future.
@@ -72,7 +72,7 @@ export default function HomePage() {
                 <div className="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-6 backdrop-blur">
                   <div className="flex items-center gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/20 text-white">
-                      <Sparkles className="h-6 w-6" />
+                      <img src="/logoWhite.png" alt="Project Icon" className="h-10 w-10" />
                     </div>
                     <div>
                       <p className="text-sm text-slate-200">Project Spotlight</p>
