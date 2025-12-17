@@ -5,9 +5,11 @@ export const navLinks = [
   { label: 'Team', path: '/team' },
   { label: 'Events', path: '/events' },
   { label: 'Gallery', path: '/gallery' },
+  { label: 'Blogs', path: '/blogs' },
   { label: 'Contact', path: '/contact' },
   { label: 'Login', path: '/login' },
   { label: 'Register', path: '/register' },
+  { label: 'Admin', path: '/admin' },
 ]
 
 export type ProjectCategory = 'AI' | 'Hardware' | 'IoT' | 'Software'
@@ -206,6 +208,64 @@ export const gallery = [
     id: 'g6',
     title: 'Competition Prep',
     description: 'Stress-testing robots before regional qualifiers.',
+  },
+]
+
+export const adminMembers = [
+  {
+    id: 'm1',
+    name: 'Aline Uwase',
+    role: 'Admin',
+    squad: 'AI & Vision',
+    status: 'Active',
+  },
+  {
+    id: 'm2',
+    name: 'Eric Nshimiyimana',
+    role: 'Member',
+    squad: 'Hardware',
+    status: 'Active',
+  },
+  {
+    id: 'm3',
+    name: 'Diane Iradukunda',
+    role: 'Member',
+    squad: 'Software',
+    status: 'Active',
+  },
+  {
+    id: 'm4',
+    name: 'Sandrine Mukamana',
+    role: 'Member',
+    squad: 'Operations',
+    status: 'Suspended',
+  },
+]
+
+export const joinRequests = [
+  {
+    id: 'r1',
+    name: 'Ines Kamali',
+    email: 'ines.kamali@rca.rw',
+    interest: 'AI & Vision',
+    note: 'Interested in safety detection models.',
+    submitted: 'Today',
+  },
+  {
+    id: 'r2',
+    name: 'Patrick Rugamba',
+    email: 'patrick.rugamba@rca.rw',
+    interest: 'Hardware',
+    note: 'Experience with PCB design, wants to join rover squad.',
+    submitted: 'Yesterday',
+  },
+  {
+    id: 'r3',
+    name: 'Lydia Uwimana',
+    email: 'lydia.uwimana@rca.rw',
+    interest: 'IoT',
+    note: 'Worked on LoRa mesh, wants to help sensor rollout.',
+    submitted: '2 days ago',
   },
 ]
 
