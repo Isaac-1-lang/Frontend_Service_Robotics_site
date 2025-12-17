@@ -1,4 +1,4 @@
-import { Menu, X, Bot } from 'lucide-react'
+import { Menu, X} from 'lucide-react'
 import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { navLinks } from '../../data/content'
