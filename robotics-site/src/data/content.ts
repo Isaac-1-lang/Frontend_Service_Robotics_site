@@ -8,8 +8,6 @@ export const navLinks = [
   { label: 'Blogs', path: '/blogs' },
   { label: 'Contact', path: '/contact' },
   { label: 'Login', path: '/login' },
-  { label: 'Register', path: '/register' },
-  { label: 'Admin', path: '/admin' },
 ]
 
 export type ProjectCategory = 'AI' | 'Hardware' | 'IoT' | 'Software'
