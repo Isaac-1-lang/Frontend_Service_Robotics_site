@@ -2,7 +2,6 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { ShieldCheck, LogIn } from 'lucide-react'
 import { Card } from '../components/ui/Card'
-import { Section } from '../components/ui/Section'
 import { buttonClasses } from '../components/ui/buttonStyles'
 import { Link } from 'react-router-dom'
 
@@ -14,6 +13,7 @@ export default function LoginPage() {
     setMessage(
       'Demo only: authenticate against your admin or member account. No backend is connected yet.',
     )
+    // 
   }
 
   return (

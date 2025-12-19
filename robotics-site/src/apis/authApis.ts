@@ -1,0 +1,16 @@
+import apiClient from './main';
+
+export interface LoginData {
+  email: string;
+  password: string;
+}
+export interface RegisterData {
+  fullName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+export const login = async (data: LoginData) => {
+  const response = await apiClient.post('/auth/login', data);
+  return response.data;
+}
