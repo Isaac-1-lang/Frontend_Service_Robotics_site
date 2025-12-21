@@ -1,23 +1,21 @@
 import apiClient from './main';
 
 export interface ProjectData {
-  id: string;
+  _id: string;
   title: string;
   content: string;
-  author: { id: string; username: string };
-  mainTag: string;
-  tags: string[];
-  imageUrl: string;
-  category?: 'AI' | 'Hardware' | 'IoT' | 'Software';
-  description?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  author: { _id: string; username: string };
+  mainTag: { _id: string; name: string; type: string };
+  tags: { _id: string; name: string; type: string }[];
+  imageUrl?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 // Get all projects
 export const getProjects = async (): Promise<ProjectData[]> => {
-  const response = await apiClient.get<ProjectData[]>('/projects');
-  return response.data;
+  const response = await apiClient.get<{ projects: ProjectData[] }>('/projects');
+  return response.data.projects;
 }
 
 // Get single project by ID
@@ -27,14 +25,18 @@ export const getProjectById = async (id: string): Promise<ProjectData> => {
 }
 
 // Create new project
-export const createProject = async (projectData: Omit<ProjectData, 'id'>): Promise<ProjectData> => {
-  const response = await apiClient.post<ProjectData>('/projects', projectData);
+export const createProject = async (projectData: FormData): Promise<ProjectData> => {
+  const response = await apiClient.post<ProjectData>('/projects', projectData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data;
 }
 
 // Update project
-export const updateProject = async (id: string, projectData: Partial<ProjectData>): Promise<ProjectData> => {
-  const response = await apiClient.put<ProjectData>(`/projects/${id}`, projectData);
+export const updateProject = async (id: string, projectData: FormData): Promise<ProjectData> => {
+  const response = await apiClient.put<ProjectData>(`/projects/${id}`, projectData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
   return response.data;
 }
 

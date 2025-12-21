@@ -1,15 +1,15 @@
 import apiClient from './main';
 
-
 export interface MemberData {
-  fullName: string;
+  _id: string;
+  username: string;
   role: string;
-  bio: string;
-  email: string;
-  linkedIn?: string;
-  github?: string;
+  bio?: string;
+  profilePicture?: string;
+  createdAt: string;
 }
+
 export const getMembers = async () => {
-  const response = await apiClient.get<MemberData[]>('/members');
+  const response = await apiClient.get<MemberData[]>('/users/members');
   return response.data;
 }

@@ -6,10 +6,10 @@ export interface LoginData {
 }
 
 export interface RegisterData {
-  fullName: string;
+  username: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  bio?: string;
 }
 
 export const login = async (data: LoginData) => {
@@ -18,8 +18,7 @@ export const login = async (data: LoginData) => {
 }
 
 export const register = async (data: RegisterData) => {
-  // Remove confirmPassword before sending to the server
-  const { confirmPassword, ...registrationData } = data;
-  const response = await apiClient.post('/auth/register', registrationData);
+  const response = await apiClient.post('/auth/register', data);
+  console.log(response.data)
   return response.data;
 }
