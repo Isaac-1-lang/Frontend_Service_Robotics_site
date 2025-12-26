@@ -51,9 +51,9 @@ export default function HomePage() {
               </div>
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
                 {[
-                  { label: 'Active Projects', value: '12' },
-                  { label: 'Members', value: '60+' },
-                  { label: 'Competitions', value: '15+' },
+                  { label: 'Active Projects', value: '15+' },
+                  { label: 'Members', value: '30+' },
+                  // { label: 'Competitions', value: '15+' },
                 ].map((item) => (
                   <div
                     key={item.label}
@@ -118,7 +118,7 @@ export default function HomePage() {
                 <div className="h-36 bg-gradient-to-br from-primary/10 via-accent/20 to-white" />
                 <div className="space-y-3 p-6">
                   <div className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
-                    {project.category}
+                    {project.mainTag}
                   </div>
                   <h3 className="text-xl font-bold text-text-primary">
                     {project.title}
@@ -127,7 +127,7 @@ export default function HomePage() {
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {project.stack.map((tech) => (
+                    {project.tags.map((tech) => (
                       <span
                         key={tech}
                         className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
@@ -223,7 +223,7 @@ export default function HomePage() {
                 <div className="h-36 bg-gradient-to-br from-primary/10 via-accent/20 to-white" />
                 <div className="space-y-3 p-6">
                   <div className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
-                    {project.category}
+                    {project.mainTag}
                   </div>
                   <h3 className="text-xl font-bold text-text-primary">
                     {project.title}
@@ -232,7 +232,7 @@ export default function HomePage() {
                     {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
-                    {project.stack.map((tech) => (
+                    {project.tags.map((tech) => (
                       <span
                         key={tech}
                         className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
