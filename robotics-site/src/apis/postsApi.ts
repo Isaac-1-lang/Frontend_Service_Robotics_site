@@ -46,6 +46,8 @@ export const getPosts = async (): Promise<PostData[]> => {
 
   const posts = await sanityClient.fetch(query);
 
+  if (!posts) return [];
+
   return posts.map((p: any) => ({
     _id: p._id,
     title: p.title,

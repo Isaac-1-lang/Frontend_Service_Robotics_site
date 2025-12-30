@@ -41,6 +41,8 @@ export const getProjects = async (): Promise<ProjectData[]> => {
 
   const projects = await sanityClient.fetch(query);
 
+  if (!projects) return [];
+
   // Map to match existing interface expectation roughly
   return projects.map((p: any) => ({
     ...p,

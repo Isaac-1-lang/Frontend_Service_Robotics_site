@@ -4,30 +4,49 @@ import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import { whyRobotics, events } from '../data/content'
 import { getProjects, type ProjectData } from '../apis/projectApis'
+import { getPosts, type PostData } from '../apis/postsApi'
 import { Card } from '../components/ui/Card'
 import { Section } from '../components/ui/Section'
 import { buttonClasses } from '../components/ui/buttonStyles'
 
 export default function HomePage() {
   const [projects, setProjects] = useState<ProjectData[]>([])
+  const [posts, setPosts] = useState<PostData[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getProjects()
-        setProjects(data)
-      } catch (error) {
-        console.error('Failed to fetch projects:', error)
+        const [projectsData, postsData] = await Promise.all([
+          getProjects(),
+          getPosts()
+        ])
+        setProjects(projectsData)
+        setPosts(postsData)
+      } catch (err: any) {
+        console.error('Failed to fetch data:', err)
+        let errorMessage = 'Failed to load content.'
+
+        if (err.message && err.message.includes('Network Error')) {
+          errorMessage = 'Network Error: Check Sanity CORS settings.'
+        } else if (err.statusCode === 401 || err.statusCode === 403) {
+          errorMessage = 'Access Denied: Check API Token.'
+        }
+
+        // Don't block UI entirely, just log error for now or show toaster in real app
+        // We'll set a state to optionally show a banner
+        setError(errorMessage)
       } finally {
         setIsLoading(false)
       }
     }
 
-    fetchProjects()
+    fetchData()
   }, [])
 
   const featuredProjects = projects.slice(0, 3)
+  const featuredPosts = posts.slice(0, 3)
   const upcomingEvents = events.filter((event) => event.status === 'upcoming')
 
   return (
@@ -121,6 +140,14 @@ export default function HomePage() {
           </div>
         </div>
       </Section>
+
+      {error && (
+        <Section className="py-2">
+          <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-sm text-red-600">
+            {error}
+          </div>
+        </Section>
+      )}
 
       <Section
         title="Featured Robotics Projects"
@@ -253,48 +280,62 @@ export default function HomePage() {
         description="From AI vision to IoT sensor networks, explore the engineering work powering our competitions and demos."
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {featuredProjects.map((project) => (
-            <motion.div
-              key={project._id}
-              whileHover={{ y: -4 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-            >
-              <Card className="h-full overflow-hidden border-slate-200/80">
-                <div
-                  className="h-36 bg-cover bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: project.imageUrl ? `url(${project.imageUrl})` : undefined,
-                    backgroundColor: !project.imageUrl ? '#f1f5f9' : undefined
-                  }}
-                >
-                  {!project.imageUrl && (
-                    <div className="h-full w-full bg-gradient-to-br from-primary/10 via-accent/20 to-white" />
-                  )}
-                </div>
-                <div className="space-y-3 p-6">
-                  <div className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
-                    {project.mainTag.name}
+          {isLoading ? (
+            <div className="col-span-full py-12 text-center text-text-muted">
+              Loading blogs...
+            </div>
+          ) : featuredPosts.length > 0 ? (
+            featuredPosts.map((post) => (
+              <motion.div
+                key={post._id}
+                whileHover={{ y: -4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+              >
+                <Card className="h-full overflow-hidden border-slate-200/80">
+                  <div
+                    className="h-36 bg-cover bg-center bg-no-repeat"
+                    style={{
+                      backgroundImage: post.imageUrl ? `url(${post.imageUrl})` : undefined,
+                      backgroundColor: !post.imageUrl ? '#f1f5f9' : undefined
+                    }}
+                  >
+                    {!post.imageUrl && (
+                      <div className="h-full w-full bg-gradient-to-br from-primary/10 via-accent/20 to-white" />
+                    )}
                   </div>
-                  <h3 className="text-xl font-bold text-text-primary">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
-                    {project.content}
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span
-                        key={tag._id}
-                        className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
-                      >
-                        {tag.name}
-                      </span>
-                    ))}
+                  <div className="space-y-3 p-6">
+                    <div className="inline-flex rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {post.mainTag.name}
+                    </div>
+                    <h3 className="text-xl font-bold text-text-primary">
+                      {post.title}
+                    </h3>
+                    <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
+                      {post.content}
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.slice(0, 3).map((tag) => (
+                        <span
+                          key={tag._id}
+                          className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="mt-4 flex items-center justify-between text-xs text-text-muted">
+                      <span>By {post.author.username}</span>
+                      <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                    </div>
                   </div>
-                </div>
-              </Card>
-            </motion.div>
-          ))}
+                </Card>
+              </motion.div>
+            ))
+          ) : (
+            <div className="col-span-full py-12 text-center text-text-muted">
+              No blogs found.
+            </div>
+          )}
         </div>
       </Section>
     </>

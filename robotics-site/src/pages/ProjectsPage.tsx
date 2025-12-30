@@ -171,8 +171,9 @@ export default function ProjectsPage() {
   if (error) {
     return (
       <Section title="Robotics Projects" eyebrow="Builds & research" description="Something went wrong.">
-        <div className="flex justify-center py-12 text-red-500">
-          {error}
+        <div className="rounded-lg bg-red-50 border border-red-200 p-6 text-center">
+          <p className="text-red-600 mb-2 font-semibold">Unable to load projects</p>
+          <p className="text-sm text-red-500">{error}</p>
         </div>
       </Section>
     )
@@ -209,165 +210,172 @@ export default function ProjectsPage() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {filteredProjects.map((project) => {
-            const projectComments = getProjectComments(project._id)
-            const projectReactions = getProjectReactions(project._id)
-            const totalReactions = getTotalReactions(project._id)
-            const isCommentsOpen = showComments === project._id
-            const isReactionsOpen = showReactions === project._id
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project) => {
+              const projectComments = getProjectComments(project._id)
+              const projectReactions = getProjectReactions(project._id)
+              const totalReactions = getTotalReactions(project._id)
+              const isCommentsOpen = showComments === project._id
+              const isReactionsOpen = showReactions === project._id
 
-            return (
-              <Card
-                key={project._id}
-                className="flex h-full flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lg"
-              >
-                {project.imageUrl ? (
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="h-36 w-full object-cover"
-                  />
-                ) : (
-                  <div className="h-36 bg-gradient-to-br from-primary/10 via-accent/15 to-white" />
-                )}
-
-                <div className="flex flex-1 flex-col space-y-3 p-6">
-                  <div className="inline-flex w-fit rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
-                    {project.mainTag?.name}
-                  </div>
-                  <h3 className="text-xl font-bold text-text-primary">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
-                    {project.content}
-                  </p>
-                  <div className="mt-auto flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <span
-                        key={tag._id}
-                        className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
-                      >
-                        {tag.name}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Reactions Summary */}
-                  {projectReactions.length > 0 && (
-                    <div className="flex flex-wrap gap-2 pt-2">
-                      {projectReactions.map((reaction) => {
-                        const Icon = reactionConfig[reaction.type].icon
-                        return (
-                          <span
-                            key={reaction.type}
-                            className={`flex items-center gap-1 text-xs ${reactionConfig[reaction.type].color}`}
-                          >
-                            <Icon className="h-3 w-3" />
-                            {reaction.count}
-                          </span>
-                        )
-                      })}
-                    </div>
+              return (
+                <Card
+                  key={project._id}
+                  className="flex h-full flex-col overflow-hidden transition hover:-translate-y-1 hover:shadow-lg"
+                >
+                  {project.imageUrl ? (
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="h-36 w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-36 bg-gradient-to-br from-primary/10 via-accent/15 to-white" />
                   )}
 
-                  <div className="mt-4 flex items-center justify-between">
-                    <Link to={`/projects/${project._id}`} className="text-sm text-blue-500">
-                      Read more
-                    </Link>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setShowReactions(isReactionsOpen ? null : project._id)}
-                        className="flex items-center gap-1 text-sm text-text-muted hover:text-primary transition"
-                      >
-                        <Heart className="h-4 w-4" />
-                        {totalReactions}
-                      </button>
-                      <button
-                        onClick={() => setShowComments(isCommentsOpen ? null : project._id)}
-                        className="flex items-center gap-1 text-sm text-text-muted hover:text-primary transition"
-                      >
-                        <MessageCircle className="h-4 w-4" />
-                        {projectComments.length}
-                      </button>
+                  <div className="flex flex-1 flex-col space-y-3 p-6">
+                    <div className="inline-flex w-fit rounded-full bg-accent/10 px-3 py-1 text-xs font-semibold text-primary">
+                      {project.mainTag?.name}
                     </div>
-                  </div>
+                    <h3 className="text-xl font-bold text-text-primary">
+                      {project.title}
+                    </h3>
+                    <p className="text-sm text-text-muted leading-relaxed line-clamp-3">
+                      {project.content}
+                    </p>
+                    <div className="mt-auto flex flex-wrap gap-2">
+                      {project.tags.map((tag) => (
+                        <span
+                          key={tag._id}
+                          className="rounded-full bg-background px-3 py-1 text-xs font-semibold text-text-muted"
+                        >
+                          {tag.name}
+                        </span>
+                      ))}
+                    </div>
 
-                  {/* Reactions Panel */}
-                  {isReactionsOpen && (
-                    <div className="mt-4 space-y-3 border-t pt-4">
-                      <h4 className="font-semibold text-sm text-text-primary">React to this project</h4>
-                      <div className="grid grid-cols-3 gap-2">
-                        {(Object.keys(reactionConfig) as ReactionType[]).map((type) => {
-                          const { icon: Icon, label, color } = reactionConfig[type]
-                          const reactionCount = projectReactions.find((r) => r.type === type)?.count || 0
-
+                    {/* Reactions Summary */}
+                    {projectReactions.length > 0 && (
+                      <div className="flex flex-wrap gap-2 pt-2">
+                        {projectReactions.map((reaction) => {
+                          const Icon = reactionConfig[reaction.type].icon
                           return (
-                            <button
-                              key={type}
-                              onClick={() => handleReaction(project._id, type)}
-                              className="flex flex-col items-center gap-1 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 hover:border-primary transition"
+                            <span
+                              key={reaction.type}
+                              className={`flex items-center gap-1 text-xs ${reactionConfig[reaction.type].color}`}
                             >
-                              <Icon className={`h-5 w-5 ${color}`} />
-                              <span className="text-xs font-medium text-text-primary">{label}</span>
-                              {reactionCount > 0 && (
-                                <span className="text-xs text-text-muted">{reactionCount}</span>
-                              )}
-                            </button>
+                              <Icon className="h-3 w-3" />
+                              {reaction.count}
+                            </span>
                           )
                         })}
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Comments Section */}
-                  {isCommentsOpen && (
-                    <div className="mt-4 space-y-3 border-t pt-4">
-                      <h4 className="font-semibold text-sm text-text-primary">Comments</h4>
-
-                      <div className="space-y-2 max-h-48 overflow-y-auto">
-                        {projectComments.length === 0 ? (
-                          <p className="text-xs text-text-muted">No comments yet. Be the first!</p>
-                        ) : (
-                          projectComments.map((comment) => (
-                            <div key={comment.id} className="bg-background p-3 rounded text-xs">
-                              <p className="font-semibold text-text-primary">{comment.author}</p>
-                              <p className="text-text-muted mt-1">{comment.text}</p>
-                              <p className="text-text-muted/70 text-xs mt-1">
-                                {new Date(comment.timestamp).toLocaleDateString()}
-                              </p>
-                            </div>
-                          ))
-                        )}
-                      </div>
-
-                      <div className="space-y-2">
-                        <input
-                          type="text"
-                          placeholder="Your name"
-                          value={newComment.author}
-                          onChange={(e) => setNewComment({ ...newComment, author: e.target.value })}
-                          className="w-full rounded border border-gray-300 px-3 py-2 text-xs focus:border-primary focus:outline-none"
-                        />
-                        <textarea
-                          placeholder="Add a comment..."
-                          value={newComment.text}
-                          onChange={(e) => setNewComment({ ...newComment, text: e.target.value })}
-                          className="w-full rounded border border-gray-300 px-3 py-2 text-xs focus:border-primary focus:outline-none"
-                          rows={3}
-                        />
+                    <div className="mt-4 flex items-center justify-between">
+                      <Link to={`/projects/${project._id}`} className="text-sm text-blue-500">
+                        Read more
+                      </Link>
+                      <div className="flex items-center gap-3">
                         <button
-                          onClick={() => handleAddComment(project._id)}
-                          className={buttonClasses({ variant: 'primary' }) + ' w-full text-xs'}
+                          onClick={() => setShowReactions(isReactionsOpen ? null : project._id)}
+                          className="flex items-center gap-1 text-sm text-text-muted hover:text-primary transition"
                         >
-                          Post Comment
+                          <Heart className="h-4 w-4" />
+                          {totalReactions}
+                        </button>
+                        <button
+                          onClick={() => setShowComments(isCommentsOpen ? null : project._id)}
+                          className="flex items-center gap-1 text-sm text-text-muted hover:text-primary transition"
+                        >
+                          <MessageCircle className="h-4 w-4" />
+                          {projectComments.length}
                         </button>
                       </div>
                     </div>
-                  )}
-                </div>
-              </Card>
-            )
-          })}
+
+                    {/* Reactions Panel */}
+                    {isReactionsOpen && (
+                      <div className="mt-4 space-y-3 border-t pt-4">
+                        <h4 className="font-semibold text-sm text-text-primary">React to this project</h4>
+                        <div className="grid grid-cols-3 gap-2">
+                          {(Object.keys(reactionConfig) as ReactionType[]).map((type) => {
+                            const { icon: Icon, label, color } = reactionConfig[type]
+                            const reactionCount = projectReactions.find((r) => r.type === type)?.count || 0
+
+                            return (
+                              <button
+                                key={type}
+                                onClick={() => handleReaction(project._id, type)}
+                                className="flex flex-col items-center gap-1 rounded-lg border border-gray-200 p-3 hover:bg-gray-50 hover:border-primary transition"
+                              >
+                                <Icon className={`h-5 w-5 ${color}`} />
+                                <span className="text-xs font-medium text-text-primary">{label}</span>
+                                {reactionCount > 0 && (
+                                  <span className="text-xs text-text-muted">{reactionCount}</span>
+                                )}
+                              </button>
+                            )
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Comments Section */}
+                    {isCommentsOpen && (
+                      <div className="mt-4 space-y-3 border-t pt-4">
+                        <h4 className="font-semibold text-sm text-text-primary">Comments</h4>
+
+                        <div className="space-y-2 max-h-48 overflow-y-auto">
+                          {projectComments.length === 0 ? (
+                            <p className="text-xs text-text-muted">No comments yet. Be the first!</p>
+                          ) : (
+                            projectComments.map((comment) => (
+                              <div key={comment.id} className="bg-background p-3 rounded text-xs">
+                                <p className="font-semibold text-text-primary">{comment.author}</p>
+                                <p className="text-text-muted mt-1">{comment.text}</p>
+                                <p className="text-text-muted/70 text-xs mt-1">
+                                  {new Date(comment.timestamp).toLocaleDateString()}
+                                </p>
+                              </div>
+                            ))
+                          )}
+                        </div>
+
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            placeholder="Your name"
+                            value={newComment.author}
+                            onChange={(e) => setNewComment({ ...newComment, author: e.target.value })}
+                            className="w-full rounded border border-gray-300 px-3 py-2 text-xs focus:border-primary focus:outline-none"
+                          />
+                          <textarea
+                            placeholder="Add a comment..."
+                            value={newComment.text}
+                            onChange={(e) => setNewComment({ ...newComment, text: e.target.value })}
+                            className="w-full rounded border border-gray-300 px-3 py-2 text-xs focus:border-primary focus:outline-none"
+                            rows={3}
+                          />
+                          <button
+                            onClick={() => handleAddComment(project._id)}
+                            className={buttonClasses({ variant: 'primary' }) + ' w-full text-xs'}
+                          >
+                            Post Comment
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              )
+            })
+          ) : (
+            <div className="col-span-full py-16 text-center border-2 border-dashed border-gray-200 rounded-xl">
+              <p className="font-semibold text-lg text-text-primary">No projects found</p>
+              <p className="text-text-muted mt-1">Check back later or try clearing filters.</p>
+            </div>
+          )}
         </div>
       </Section>
     </>

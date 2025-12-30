@@ -66,8 +66,9 @@ export default function BlogsPage() {
   if (error) {
     return (
       <Section title="Robotics Monthly Blogs" eyebrow="Builds & research" description="Something went wrong.">
-        <div className="flex justify-center py-12 text-red-500">
-          {error}
+        <div className="rounded-lg bg-red-50 border border-red-200 p-6 text-center">
+          <p className="text-red-600 mb-2 font-semibold">Unable to load blogs</p>
+          <p className="text-sm text-red-500">{error}</p>
         </div>
       </Section>
     )
@@ -148,9 +149,9 @@ export default function BlogsPage() {
               </Card>
             ))
           ) : (
-            <div className="col-span-full py-12 text-center text-text-muted">
-              <p>No blogs found.</p>
-              <p className="text-sm mt-2">If you recently added content, make sure it is <strong>Published</strong> in Sanity Studio.</p>
+            <div className="col-span-full py-16 text-center border-2 border-dashed border-gray-200 rounded-xl">
+              <p className="font-semibold text-lg text-text-primary">No blogs found</p>
+              <p className="text-text-muted mt-1">Check back later or try clearing filters.</p>
             </div>
           )}
         </div>
